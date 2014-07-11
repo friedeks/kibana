@@ -14,6 +14,7 @@ function (angular, _) {
       $scope.gist_pattern = /(^\d{5,}$)|(^[a-z0-9]{10,}$)|(gist.github.com(\/*.*)\/[a-z0-9]{5,}\/*$)/;
       $scope.gist = $scope.gist || {};
       $scope.elasticsearch = $scope.elasticsearch || {};
+      $scope.elasticsearch.adminenabled = ($cookies.user != 'guest');
     };
 
     $scope.showDropdown = function(type) {
@@ -52,6 +53,10 @@ function (angular, _) {
     };
 
     $scope.elasticsearch_save = function(type,ttl) {
+      if($cookies.user == "guest" && dashboard.current.protected) {
+        alert("Dashboard ist geschuetzt !");
+        return;
+      }
       dashboard.elasticsearch_save(
         type,
         ($scope.elasticsearch.title || dashboard.current.title),
