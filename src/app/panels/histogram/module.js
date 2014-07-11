@@ -592,12 +592,15 @@ function (angular, app, $, _, kbn, moment, timeSeries, numeral) {
         };
 
         var derivative = function(series) {
-          return _.map(series, function(p,i) {
+          return _.map(series, function (p, i) {
             var _v;
-            if(i === 0 || p[1] === null) {
-              _v = [p[0],null];
+            if (p[1] === null) {
+              _v = [p[0], null];
+            } else if (i === 0) {
+              //_v = [p[0],null];
+              _v = (series[1][1] === null || series[0][1] === null) ? [p[0], null] : [p[0], series[1][1] - series[0][1]];
             } else {
-              _v = series[i-1][1] === null ? [p[0],null] : [p[0],p[1]-(series[i-1][1])];
+              _v = series[i - 1][1] === null ? [p[0], null] : [p[0], p[1] - (series[i - 1][1])];
             }
             return _v;
           });
